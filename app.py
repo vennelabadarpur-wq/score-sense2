@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request
 import pickle
+import os
 
-app = Flask(__name__)
+app = Flask(_name_)
 
-# Load your trained Random Forest model
-model = pickle.load(open("teja.pkl", "rb"))
+model = None
 
 @app.route("/")
 def home():
@@ -12,19 +12,19 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    # Only integers accepted
+    global model
+
+    if model is None:
+        model = pickle.load(open("teja.pkl", "rb"))
+
     study = int(request.form["study"])
     social = int(request.form["social"])
     attendance = int(request.form["attendance"])
     sleep = int(request.form["sleep"])
 
-    # Prediction
     prediction = model.predict([[study, social, attendance, sleep]])
 
-    # Round to 2 decimals
     return render_template("index.html", result=round(prediction[0], 2))
 
-import os
-
-if __name__ == "__main__":
+if _name_ == "_main_":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
