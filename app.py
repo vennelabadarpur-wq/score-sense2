@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import pickle
 import os
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 model = None
 
@@ -26,5 +26,6 @@ def predict():
 
     return render_template("index.html", result=round(prediction[0], 2))
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+
